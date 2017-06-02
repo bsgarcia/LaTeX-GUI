@@ -38,7 +38,8 @@ class LatexVimCompiler(QWidget):
 
         self.mode.addItem("PdfLaTex")
         self.mode.addItem("XeLaTex")
-
+        self.mode.addItem("LuaLaTex")
+        
         self.pdf_file = sys.argv[1][:-3] + "pdf" 
 
         self.widgets = [self.file_to_compile,
@@ -48,24 +49,20 @@ class LatexVimCompiler(QWidget):
                         ]
         
     def compile(self):
-
+        
         mode = str(self.mode.currentText()).lower()
         
         process = Popen([mode, sys.argv[1]], stdout=PIPE)
+       
+        out = process.stdout.read().decode()
 
-        out = str(process.stdout.read(), 'utf-8')
         self.output.appendPlainText(out)
 
         if "fatal error" and "emergency stop" not in out.lower():
             Popen(["xdg-open", self.pdf_file])
 
         else:
-            msgbox = QMessageBox()
-            msgbox.setIcon(QMessageBox.Critical)
-            msgbox.setWindowTitle("Error")
-            msgbox.setText("File compilation failed!")
-
-            msgbox.exec_()
+            self.show_error(text="Error during compilation!")
                
     def fill_layout(self):
         
@@ -78,6 +75,16 @@ class LatexVimCompiler(QWidget):
         self.setWindowTitle("Vim LaTex Plugin")
         self.setGeometry(0, 0, 500, 300)
         self.show()
+
+    @staticmethod
+    def show_error(text):
+        
+        msgbox = QMessageBox()
+        msgbox.setIcon(QMessageBox.Critical)
+        msgbox.setWindowTitle("Error")
+        msgbox.setText(text)
+        msgbox.exec_()
+
 
     @staticmethod
     def main():
