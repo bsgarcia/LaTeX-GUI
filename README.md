@@ -1,6 +1,6 @@
 # VIM LATEX GUI
 ## Why? 
-I thought that having a little gui showing logs and compiler options could be nice. 
+I thought that having a little gui showing logs and compiling options would be more pleasant than the actual latex-vim-suite solutions for compiling. 
 
 ## Demo 
 ![demo](http://i.imgur.com/Rzn29eK.gif)
@@ -8,7 +8,7 @@ I thought that having a little gui showing logs and compiler options could be ni
 ## Dependencies
 
 * PyQt5
-* vim-do plugin
+* [vim-do plugin](https://github.com/joonty/vim-do) (Or at least a plugin allowing multithreading in vim)
 
 ## Usage 
 
