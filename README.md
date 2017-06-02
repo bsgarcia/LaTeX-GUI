@@ -14,8 +14,9 @@ I thought that having a little gui showing logs and compiler options could be ni
 
 Write this line in your .vimrc:
 
+```vimscript
    nnoremap <key_of_your_choice> :DoQuietly python /path/to/the/script %:p<CR> 
-
+```vimscript
 
  
 
