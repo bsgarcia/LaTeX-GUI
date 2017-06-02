@@ -1,5 +1,5 @@
 # VIM LATEX GUI
-## Why ? 
+## Why? 
 I thought that having a little gui showing logs and compiler options could be nice. 
 
 ## Demo 
