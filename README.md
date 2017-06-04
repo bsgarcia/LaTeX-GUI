@@ -8,7 +8,7 @@ I thought that having a little gui showing logs and compiling options would be m
 ## Dependencies
 
 * PyQt5
-* [vim-do plugin](https://github.com/joonty/vim-do) (Or at least a plugin allowing multithreading in vim)
+* [vim-dispatch plugin](https://github.com/tpope/vim-dispatch) (Or at least a plugin allowing multithreading in vim)
 
 ## Usage 
 
@@ -16,7 +16,7 @@ Write this line in your .vimrc:
 
 ```vimscript
 
-   nnoremap <key_of_your_choice> :DoQuietly python /path/to/the/script %:p<CR> 
+   nnoremap <key_of_your_choice> :Start! python /path/to/the/script %:p<CR> 
 
 ```
 
