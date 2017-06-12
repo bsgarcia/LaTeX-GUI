@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import (QApplication, QPlainTextEdit, QVBoxLayout,
                              QComboBox, QMessageBox, QPushButton,
-                             QWidget, QLineEdit)
-from subprocess import Popen, PIPE
+                             QWidget, QLineEdit, QCheckBox)
+from subprocess import Popen, getoutput
 import os
 import sys
 
 
-class LatexVimCompiler(QWidget):
+class LatexGUI(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -17,7 +17,8 @@ class LatexVimCompiler(QWidget):
         self.compile_btn = QPushButton(self)
 
         self.output = QPlainTextEdit(self)
-
+        
+        self.bib = QCheckBox(self)
         self.mode = QComboBox(self)
 
         self.set_up()
@@ -39,30 +40,45 @@ class LatexVimCompiler(QWidget):
         self.mode.addItem("PdfLaTeX")
         self.mode.addItem("XeLaTeX")
         self.mode.addItem("LuaLaTex")
+        self.bib.setText("BibTeX")
 
         self.pdf_file = sys.argv[1][:-3] + "pdf"
 
         self.widgets = [self.file_to_compile,
                         self.mode,
+                        self.bib,
                         self.output,
                         self.compile_btn]
 
     def compile(self):
 
         mode = str(self.mode.currentText()).lower()
-        process = Popen([mode, sys.argv[1]], stdout=PIPE)
+        cmd = "--halt-on-error"
+        output = getoutput(" ".join([mode, cmd, sys.argv[1]]))
 
         try:
-            out = process.stdout.read().decode()
-            self.output.appendPlainText(out)
+            self.output.appendPlainText(output)
 
-            if "fatal error" and "emergency stop" not in out.lower():
+            err = ["emergency", "error"]
+
+            if all(e not in output.lower() for e in err):
+
+                if self.bib.isChecked():
+
+                    output = getoutput(" ".join(["bibtex", cmd, sys.argv[1][:-4]]))
+                    self.output.appendPlainText(output)
+                    output = getoutput(" ".join([mode, cmd, sys.argv[1]]))
+                    self.output.appendPlainText(output)
+                
                 Popen(["xdg-open", self.pdf_file])
+
             else:
                 self.show_error(text="Error during compilation!")
 
         except Exception as e:
             self.show_error(text=str(e))
+
+
 
     def fill_layout(self):
 
@@ -89,10 +105,10 @@ class LatexVimCompiler(QWidget):
     def main():
 
         app = QApplication(sys.argv)
-        win = LatexVimCompiler()
+        win = LatexGUI()
         sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
 
-    LatexVimCompiler.main()
+    LatexGUI.main()
