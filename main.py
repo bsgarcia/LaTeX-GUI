@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import (QApplication, QPlainTextEdit, QVBoxLayout,
                              QComboBox, QMessageBox, QPushButton,
                              QWidget, QLineEdit, QCheckBox)
+from PyQt5 import Qt
 from subprocess import Popen, getoutput
 import os
 import sys
@@ -20,6 +21,8 @@ class LatexGUI(QWidget):
         
         self.bib = QCheckBox(self)
         self.mode = QComboBox(self)
+        # self.m
+        # self.mode.setAlignment(Qt.AlignRight)
 
         self.set_up()
         self.init_UI()
